@@ -4,10 +4,10 @@
 **Interfaz / Modalidad:** Gráfica (SDL3) — 1 jugador  
 
 ## Integrantes y aportes
-- Ludmila Aparicio (GitHub no informado)
+- Ludmila Aparicio (@lulyapa-git)
 - Jonatan Parada (@YonitoP)
-- Aylen Cardoso (GitHub no informado)
-- Agustina Barrientos (GitHub no informado)
+- Aylen Cardoso (@aylencc)
+- Agustina Barrientos (@agustina-barrientos)
 
 ## Reglas y alcance
 Juego del ahorcado con interfaz gráfica en SDL3, modalidad de 1 jugador con teclado. Generación de palabras a partir de lista definida y sistema de puntos por partida.
