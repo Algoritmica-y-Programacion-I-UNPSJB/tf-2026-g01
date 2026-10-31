@@ -5,7 +5,7 @@
 #include <time.h>
 
 
-#define MAX_PALABRA 30
+#define MAX_PALABRA 30 
 
 typedef enum{
     ESTADO_JUGANDO,
@@ -13,23 +13,28 @@ typedef enum{
     ESTADO_DERROTA,
 } EstadoPartida;
 
+// TODO: evaluar migrar 'palabra secreta' y 'palabra oculta' a memoria dinamica para evitar desperdicio de RAM
 typedef struct{
-    char palabraSecreta[MAX_PALABRA]; // palabra a adivinar
-    char palabraOculta[MAX_PALABRA];  // los guiones bajos
+    char palabraSecreta[MAX_PALABRA]; // palabra a adivinar 
+    char palabraOculta[MAX_PALABRA];  // los guiones bajos 
     int vidasRestantes; //vidas (son 6)
-    bool letrasUsadas[26]; //registro de letras usadas
+    bool letrasUsadas[26]; //registro de letras usadas   // chequear esto (??? parte de agus
     EstadoPartida estado; //estado de la ronda
     int estrellitas; //cantidad de estrellas
 } Partida;
 
 // 1. Definimos la firma genérica para la Jump Table
 // "Puntero a una función que recibe la dirección de la Partida y no devuelve nada"
+
+// TODO: Revisar la firma genérica cuando las chicas integren el manejo de banderas/letras usadas.
 typedef void (*CargadorDiccionario)(Partida *partida);
 
-void cargarDesdeArchivo(Partida *partida, const char *nombreArchivo) {
-    FILE *archivo = fopen("diccionario.txt", "r");
+void cargarDesdeArchivo(Partida *partida, const char *nombreArchivo) {  
+    FILE *archivo = fopen("diccionario.txt", "r");  // chequear esto (???
     
     if (archivo == NULL) {
+      // FIXME: Si en el futuro 'partida' o 'dic' usan memoria dinámica (malloc),
+      // acordarse de hacer free(...) antes de hacer el return para no dejar memory leaks.
         printf("Error al abrir el archivo%s\n", nombreArchivo);
         return;
     }
@@ -73,31 +78,33 @@ void cargarDificil(Partida *partida){
 void elegirPalabra(Partida *partida, int dificultad){
     //jump table de funciones que aceptan (partida*)
     CargadorDiccionario tablaCargadores[] = {
-        NULL,   //posicion 0
-        cargarFacil,   //posicion 1
-        cargarMedio,   //posicion 2
-        cargarDificil,   //posicion 3
+        NULL,            //posicion 0 Nula (no existe dificultad 0) posicion "relleno"
+        cargarFacil,     //posicion 1  Apunta a cargar_facil
+        cargarMedio,     //posicion 2  Apunta a cargar_medio
+        cargarDificil,   //posicion 3  Apunta a cargar_dificil
     };
 
-    if (dificultad < 1 || dificultad > 3) {
+    if (dificultad < 1 || dificultad > 3) { //fallback 
         dificultad = 1;  // Por defecto Fácil si se pasa un valor inválido
     }
-    // ¡Salto directo O(1)! Llama a la función y le pasa la referencia del struct
+    // Salto directo O(1) Llama a la función y le pasa la referencia del struct
     tablaCargadores[dificultad](partida);
 }
 
 int main() {
     srand(time(NULL)); // Se inicializa la semilla del azar al arrancar
-
     Partida miPartida;
-    int dificultadSeleccionada = 2; // Supongamos que eligió Medio
 
+    //Hardcodeo temporal para probar la Jump Table sin interfaz de usuario
+    // TODO: Reemplazar por la lectura real de la opción elegida por el usuario
+    int dificultadSeleccionada = 2; 
+    //Prueba de invocación O(1) con dificultad 'Medio'
     elegirPalabra(&miPartida, dificultadSeleccionada);
 
+    //Verificación de que la palabra se cargó correctamente en el struct
     printf("Palabra cargada en la estructura: %s\n", miPartida.palabraSecreta);
 
-    // 2. TAREA DE LUDMILA: Usa juego.palabra_secreta para armar los "_ _ _ _"
-    // inicializarPalabra(&juego);
+
 
     return 0;
 }
