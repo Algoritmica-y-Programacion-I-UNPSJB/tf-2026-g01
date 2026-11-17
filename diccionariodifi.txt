@@ -24,7 +24,7 @@ estrategia
 extraordinario
 fotosintesis
 fundamento
-galaxia
+nebulosa
 geometria
 hegemonia
 hermetico
@@ -42,7 +42,7 @@ intrincado
 laberinto
 legendario
 luminosidad
-magnitudo
+magnitud
 mantenimiento
 metamorfosis
 microscopio
@@ -52,7 +52,7 @@ multitud
 navegacion
 neurociencia
 nostalgia
-obscuridad
+oscuridad
 orquesta
 paradigma
 paradoja

@@ -1,9 +1,11 @@
-#ifndef principal_struct_h
-#define principal_struct_h
 
-#include <stdio.h>
-#define max 101
-///* Modelo Struct
+#ifndef PRINCIPAL_STRUCT_H
+#define PRINCIPAL_STRUCT_H
+
+#include <stdbool.h>
+
+#define MAX_WORD_LENGTH 101
+
 typedef enum {
     EASY_MODE,
     MEDIUM_MODE,
@@ -17,17 +19,14 @@ typedef enum {
 } GameStatus;
 
 typedef struct {
-    char secret_word[max];
-    char hidden_word[max];
-    char letter_history[max];// Historial de letras probadas
-    int letter_history_counter;
+    char player_name[50];
+    char secret_word[MAX_WORD_LENGTH];
+    char hidden_word[MAX_WORD_LENGTH];
+    bool used_letters[26];
     int remaining_attempts;
     int points;
     GameStatus status;
-    Difficulty dificulty;
+    Difficulty difficulty;
 } Game;
 
 #endif
-
-//Game game;
-//*/

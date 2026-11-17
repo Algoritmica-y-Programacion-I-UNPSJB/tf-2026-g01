@@ -7,7 +7,7 @@ lapicero
 lampara
 mochila
 zapatos
-relojeria
+relojero
 telefono
 camara
 estante
@@ -28,7 +28,7 @@ avenida
 puente
 parque
 bosque
-montana
+cumbre
 volcan
 desierto
 laguna
@@ -37,7 +37,7 @@ tormenta
 relampago
 invierno
 verano
-otono
+estacion
 primavera
 almuerzo
 desayuno
@@ -51,7 +51,7 @@ tenedor
 cuchillo
 botella
 almohada
-cobija
+manta
 zapato
 camisa
 pantalon
@@ -66,10 +66,10 @@ ciencia
 dibujo
 deporte
 carrera
-nadador
+ciclista
 atleta
-quipo
-remio
+equipo
+premio
 medalla
 copa
 trofeo
@@ -97,3 +97,4 @@ sombra
 reflejo
 espejo
 magia
+iglesia
