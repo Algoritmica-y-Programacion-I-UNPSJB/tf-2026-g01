@@ -1,110 +1,80 @@
-#include <stdbool.h>
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <time.h>
+#include <ctype.h>
+#include "principal_struct.h"
+#include "word_selection.h"
 
+// Puntero a función para cargar un diccionario
+typedef void (*DictionaryLoader)(Game *game);
 
-#define MAX_PALABRA 30 
+// Carga una palabra aleatoria desde un archivo
+void load_from_file(Game *game, const char *file_name) {
+    FILE *file = fopen(file_name, "r");
 
-typedef enum{
-    ESTADO_JUGANDO,
-    ESTADO_VICTORIA,
-    ESTADO_DERROTA,
-} EstadoPartida;
-
-// TODO: evaluar migrar 'palabra secreta' y 'palabra oculta' a memoria dinamica para evitar desperdicio de RAM
-typedef struct{
-    char palabraSecreta[MAX_PALABRA]; // palabra a adivinar 
-    char palabraOculta[MAX_PALABRA];  // los guiones bajos 
-    int vidasRestantes; //vidas (son 6)
-    bool letrasUsadas[26]; //registro de letras usadas   // chequear esto (??? parte de agus
-    EstadoPartida estado; //estado de la ronda
-    int estrellitas; //cantidad de estrellas
-} Partida;
-
-// 1. Definimos la firma genérica para la Jump Table
-// "Puntero a una función que recibe la dirección de la Partida y no devuelve nada"
-
-// TODO: Revisar la firma genérica cuando las chicas integren el manejo de banderas/letras usadas.
-typedef void (*CargadorDiccionario)(Partida *partida);
-
-void cargarDesdeArchivo(Partida *partida, const char *nombreArchivo) {  
-    FILE *archivo = fopen("diccionario.txt", "r");  // chequear esto (???
-    
-    if (archivo == NULL) {
-      // FIXME: Si en el futuro 'partida' o 'dic' usan memoria dinámica (malloc),
-      // acordarse de hacer free(...) antes de hacer el return para no dejar memory leaks.
-        printf("Error al abrir el archivo%s\n", nombreArchivo);
+    if (file == NULL) {
+        printf("Error al abrir el archivo %s\n", file_name);
         return;
     }
-    
-    char palabraLectura[MAX_PALABRA];
-    int totalPalabras = 0;
 
-    while (fscanf(archivo, "%s", palabraLectura) == 1) {
-        totalPalabras++;
+    char word[MAX_WORD_LENGTH];
+    int total_words = 0;
+
+    while (fscanf(file, "%100s", word) == 1) {
+        total_words++;
     }
-    if (totalPalabras == 0) {
-        printf("El archivo %s está vacío.\n", nombreArchivo);
-        fclose(archivo);
+
+    if (total_words == 0) {
+        printf("El archivo %s esta vacio.\n", file_name);
+        fclose(file);
         return;
     }
-    //elegimos una al azar
-    int indiceAleatorio = rand() % totalPalabras;
-    rewind(archivo); // Volvemos al inicio del archivo
 
-    int contador = 0;
-    while (fscanf(archivo, "%s", palabraLectura) == 1) {
-        if (contador == indiceAleatorio) {
-            strcpy(partida->palabraSecreta, palabraLectura);
+    int random_index = rand() % total_words;
+    rewind(file);
+
+    int counter = 0;
+
+    while (fscanf(file, "%100s", word) == 1) {
+        if (counter == random_index) {
+            strcpy(game->secret_word, word);
             break;
         }
-        contador++;
+        counter++;
     }
-    fclose(archivo);
+
+    // Convertir la palabra a mayusculas
+    for (int i = 0; game->secret_word[i] != '\0'; i++) {
+        game->secret_word[i] = (char)toupper((unsigned char)game->secret_word[i]);
+    }
+
+    fclose(file);
 }
 
-void cargarFacil(Partida *partida){
-    cargarDesdeArchivo(partida, "diccionario.txt");
+void load_easy(Game *game) {
+    load_from_file(game, "diccionario.txt");
 }
-void cargarMedio(Partida *partida){
-    cargarDesdeArchivo(partida, "diccionariomedio.txt");
+
+void load_medium(Game *game) {
+    load_from_file(game, "diccionariomedio.txt");
 }
-void cargarDificil(Partida *partida){
-    cargarDesdeArchivo(partida, "diccionariodifi.txt");
+
+void load_difficult(Game *game) {
+    load_from_file(game, "diccionariodifi.txt");
 }
-//funcion principal que ejecuta el salto usando la jump table
-void elegirPalabra(Partida *partida, int dificultad){
-    //jump table de funciones que aceptan (partida*)
-    CargadorDiccionario tablaCargadores[] = {
-        NULL,            //posicion 0 Nula (no existe dificultad 0) posicion "relleno"
-        cargarFacil,     //posicion 1  Apunta a cargar_facil
-        cargarMedio,     //posicion 2  Apunta a cargar_medio
-        cargarDificil,   //posicion 3  Apunta a cargar_dificil
+
+// Seleccion de palabra mediante Jump Table
+void choose_word(Game *game, Difficulty difficulty) {
+    DictionaryLoader loaders[] = {
+        load_easy,
+        load_medium,
+        load_difficult
     };
 
-    if (dificultad < 1 || dificultad > 3) { //fallback 
-        dificultad = 1;  // Por defecto Fácil si se pasa un valor inválido
+    if (difficulty < EASY_MODE || difficulty > DIFFICULT_MODE) {
+        difficulty = EASY_MODE;
     }
-    // Salto directo O(1) Llama a la función y le pasa la referencia del struct
-    tablaCargadores[dificultad](partida);
-}
 
-int main() {
-    srand(time(NULL)); // Se inicializa la semilla del azar al arrancar
-    Partida miPartida;
-
-    //Hardcodeo temporal para probar la Jump Table sin interfaz de usuario
-    // TODO: Reemplazar por la lectura real de la opción elegida por el usuario
-    int dificultadSeleccionada = 2; 
-    //Prueba de invocación O(1) con dificultad 'Medio'
-    elegirPalabra(&miPartida, dificultadSeleccionada);
-
-    //Verificación de que la palabra se cargó correctamente en el struct
-    printf("Palabra cargada en la estructura: %s\n", miPartida.palabraSecreta);
-
-
-
-    return 0;
+    loaders[difficulty](game);
 }
