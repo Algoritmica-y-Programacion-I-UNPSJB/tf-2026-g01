@@ -421,6 +421,19 @@ void draw_game(SDL_Renderer *renderer, Game *game) {
 
     char points_text[40];
     char attempts_text[40];
+    char spaced_word[150];
+    int word_length = (int)strlen(game->hidden_word);
+    int position = 0;
+
+    for (int i = 0; i < word_length; i++) {
+        spaced_word[position++] = game->hidden_word[i];
+
+        if (i < word_length - 1) {
+            spaced_word[position++] = ' ';
+            spaced_word[position++] = ' ';
+        }
+    }
+    spaced_word[position] = '\0';
 
     draw_text(renderer, 390, 35,
               "AHORCADO", 255, 220, 100);
@@ -429,7 +442,7 @@ void draw_game(SDL_Renderer *renderer, Game *game) {
               "PALABRA:", 255, 255, 255);
 
     draw_text(renderer, 100, 145,
-              game->hidden_word, 100, 255, 150);
+              spaced_word, 100, 255, 150);
 
     snprintf(points_text, sizeof(points_text),
              "PUNTOS: %d", game->points);

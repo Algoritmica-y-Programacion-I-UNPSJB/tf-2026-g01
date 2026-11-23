@@ -71,7 +71,11 @@ void play_game(Game *game) {
     int position;
 
     while (game->status == STATUS_IN_GAME) {
-        printf("\nPalabra: %s\n", game->hidden_word);
+        printf("\nPalabra: ");
+        for (int i = 0; game->hidden_word[i] != '\0'; i++) {
+            printf("%c ", game->hidden_word[i]);
+        }
+        printf("\n");
         printf("Intentos restantes: %d\n", game->remaining_attempts);
         printf("Puntos: %d\n", game->points);
         printf("Ingrese una letra: ");
