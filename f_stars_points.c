@@ -1,15 +1,14 @@
-#include <stdio.h>
 #include <principal_struct.h>
 
-float stars_points (Game *game) {
-    //Definición de puntos según casos:
-	if (game->status == STATUS_DEFEAT) {
-        return 0;
+float calculate_stars(Game *game) {
+    if (game->status == STATUS_DEFEAT) {
+        return 0.0f;
+    }
+    
+    if (game->points <= 1) {
+        return 1;
     }
 
-    if (game->dificulty == EASY_MODE || game->dificulty == MEDIUM_MODE) {
-        return game->points;
-    } else if (game->dificulty == DIFFICULT_MODE) {
-        return game->points/2;
-    }
+    return (float)game->points;
+
 }
