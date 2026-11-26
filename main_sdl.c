@@ -315,6 +315,8 @@ void draw_menu(SDL_Renderer *renderer) {
 
     draw_button(renderer, 330, 410, 240, 55,
                 "3 - DIFICIL", 150, 70, 80);
+    draw_button(renderer, 330, 490, 240, 55,
+            "SALIR DEL JUEGO", 150, 50, 50);
 }
 
 
@@ -428,8 +430,17 @@ void draw_game(SDL_Renderer *renderer, Game *game) {
     draw_text(renderer, 100, 110,
               "PALABRA:", 255, 255, 255);
 
-    draw_text(renderer, 100, 145,
-              game->hidden_word, 100, 255, 150);
+    // Dibujo la palabra oculta con separacion
+    for (int i = 0; i < strlen(game->hidden_word); i++) { 
+
+    char letra[2];
+
+    letra[0] = game->hidden_word[i];
+    letra[1] = '\0';
+
+    draw_text(renderer, 100 + i * 35, 145,
+              letra, 100, 255, 150);
+    }
 
     snprintf(points_text, sizeof(points_text),
              "PUNTOS: %d", game->points);
@@ -623,6 +634,7 @@ void draw_result(SDL_Renderer *renderer, Game *game, bool reveal_word) {
     } else {
         draw_button(renderer, 350, 400, 200, 55,
                     "MENU PRINCIPAL", 60, 90, 150);
+         
     }
 }
 
@@ -653,7 +665,7 @@ int main(void) {
         "AHORCADO",
         WINDOW_WIDTH,
         WINDOW_HEIGHT,
-        0
+        SDL_WINDOW_RESIZABLE
     );
 
     if (window == NULL) {
@@ -678,6 +690,13 @@ int main(void) {
 
         return 1;
     }
+    // Adapto los graficos al tamaño de la ventana
+    SDL_SetRenderLogicalPresentation(
+    renderer,
+    WINDOW_WIDTH,
+    WINDOW_HEIGHT,
+    SDL_LOGICAL_PRESENTATION_LETTERBOX
+    );
 
     if (!TTF_Init()) {
 
@@ -723,6 +742,7 @@ int main(void) {
     while (running) {
 
         while (SDL_PollEvent(&event)) {
+            SDL_ConvertEventToRenderCoordinates(renderer, &event);
 
             if (event.type == SDL_EVENT_QUIT) {
 
@@ -806,6 +826,12 @@ int main(void) {
                         screen = game.secret_word[0] != '\0'
                                  ? SCREEN_GAME : SCREEN_MENU;
                     }
+                       // Boton para salir del juego
+                       if (inside_button(mouse_x, mouse_y,
+                        330, 490, 240, 55)) {
+
+                        running = false;
+}
                 }
 
                 // Selección de letras
@@ -896,6 +922,8 @@ int main(void) {
                         reveal_word = false;
                         screen = SCREEN_MENU;
                     }
+                    
+   
                 }
             }
         }
