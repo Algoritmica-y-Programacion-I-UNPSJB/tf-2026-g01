@@ -4,14 +4,14 @@ typedef enum buttons {
     start, // iniciar juego
     new_word, // renaudar juego
     finish, //finalizar juego 
-}; buttons
+} buttons; 
 
 typedef enum player_state { //formo un enum con el estado del jugador 
     not_started, //no empezo 
     playing, //jugando 
     finished, //finalizo 
 
-}; player_state
+} player_state;
 
 void start_game (void){ //declaro una funcion para el inicio del juego 
     printf ("iniciando partida...\n");
