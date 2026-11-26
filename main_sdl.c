@@ -840,20 +840,29 @@ int main(void) {
                                 }
 
                                 if (game.status != STATUS_IN_GAME) {
+                                     /* Reiniciar la opción de revelar la palabra */
+                                    reveal_word = false;
+                                    
+                                    if (game.status == STATUS_DEFEAT) {
+                                        SDL_SetRenderDrawColor(renderer, 20, 25, 40, 255);
+                                        SDL_RenderClear(renderer);
+                                        draw_game(renderer, &game);
+                                        SDL_RenderPresent(renderer);
+                                        SDL_Delay(1500);
 
-    /* Reiniciar la opción de revelar la palabra */
-    reveal_word = false;
 
-    if (game.status == STATUS_DEFEAT) {
-        SDL_SetRenderDrawColor(renderer, 20, 25, 40, 255);
-        SDL_RenderClear(renderer);
-        draw_game(renderer, &game);
-        SDL_RenderPresent(renderer);
-        SDL_Delay(1500);
-    }
-
-    screen = SCREEN_RESULT;
-}
+                                        /* Limpiar clics acumulados durante la pausa */
+                                        SDL_Event discarded_event;
+                                        while (SDL_PollEvent(&discarded_event)) {
+                                            if (discarded_event.type == SDL_EVENT_QUIT) {
+                                                running = false;
+                                            }
+                                        } 
+                                    }
+                                    
+                                    screen = SCREEN_RESULT;
+                                
+                                }
                             }
 
                             break;
