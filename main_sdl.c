@@ -431,7 +431,7 @@ void draw_game(SDL_Renderer *renderer, Game *game) {
               "PALABRA:", 255, 255, 255);
 
     // Dibujo la palabra oculta con separacion
-    for (int i = 0; i < strlen(game->hidden_word); i++) { 
+    for (int i = 0; i < strlen(game->hidden_word); i++) {
 
     char letra[2];
 
@@ -634,7 +634,7 @@ void draw_result(SDL_Renderer *renderer, Game *game, bool reveal_word) {
     } else {
         draw_button(renderer, 350, 400, 200, 55,
                     "MENU PRINCIPAL", 60, 90, 150);
-         
+
     }
 }
 
@@ -868,8 +868,8 @@ int main(void) {
                                 if (game.status != STATUS_IN_GAME) {
                                      /* Reiniciar la opción de revelar la palabra */
                                     reveal_word = false;
-                                    
-                                    if (game.status == STATUS_DEFEAT) {
+
+                                    if (game.status == STATUS_DEFEAT || game.status == STATUS_VICTORY) {
                                         SDL_SetRenderDrawColor(renderer, 20, 25, 40, 255);
                                         SDL_RenderClear(renderer);
                                         draw_game(renderer, &game);
@@ -883,11 +883,11 @@ int main(void) {
                                             if (discarded_event.type == SDL_EVENT_QUIT) {
                                                 running = false;
                                             }
-                                        } 
+                                        }
                                     }
-                                    
+
                                     screen = SCREEN_RESULT;
-                                
+
                                 }
                             }
 
@@ -922,8 +922,8 @@ int main(void) {
                         reveal_word = false;
                         screen = SCREEN_MENU;
                     }
-                    
-   
+
+
                 }
             }
         }
