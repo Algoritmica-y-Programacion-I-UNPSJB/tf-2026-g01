@@ -24,7 +24,7 @@ typedef struct {
     int remaining_attempts;
     int points;
     GameStatus status;
-    Difficulty dificulty;
+    Difficulty difficulty;
 } Game;
 
 #endif
