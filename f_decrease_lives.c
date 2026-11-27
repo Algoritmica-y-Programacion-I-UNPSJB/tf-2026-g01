@@ -5,13 +5,13 @@ void decrease_lives(Game *game) {
         return;
     }
 
-	if (EASY_MODE) {
+	if (game->difficulty == EASY_MODE) {
 		game->points--;
 		game->remaining_attempts--;
 	}
 
-	if (MEDIUM_MODE || DIFFICULT_MODE){
-		game->points-2;
+	if (game->difficulty == MEDIUM_MODE || game->difficulty == DIFFICULT_MODE){
+		game->points -= 2;
 		game->remaining_attempts--;
 	}
 
