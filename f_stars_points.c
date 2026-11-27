@@ -1,18 +1,16 @@
 #include "principal_struct.h"
 
-// Calcula la puntuación final según la dificultad
+// Calcula las estrellas en relación a los puntos
 float calculate_stars(Game *game) {
     if (game->status == STATUS_DEFEAT) {
         return 0.0f;
     }
-
-    if (game->difficulty == EASY_MODE || game->difficulty == MEDIUM_MODE) {
-        return (float)game->points;
+    
+    //Puntuación minima en MEDIUM y DIFFICULT
+    if (game->points <= 1) {
+        return 1;
     }
 
-    if (game->difficulty == DIFFICULT_MODE) {
-        return game->points / 2.0f;
-    }
+    return (float)game->points;
 
-    return 0.0f;
 }
