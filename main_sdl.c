@@ -650,6 +650,7 @@ int main(void) {
     Screen screen = SCREEN_WELCOME;
 
     bool reveal_word = false;
+    bool result_buttons_enabled = false;
 
     int name_length = 0;
 
@@ -885,7 +886,7 @@ int main(void) {
                                             }
                                         }
                                     }
-
+                                    result_buttons_enabled = false;
                                     screen = SCREEN_RESULT;
 
                                 }
@@ -897,7 +898,7 @@ int main(void) {
                 }
 
                 // Botones de resultados
-                else if (screen == SCREEN_RESULT) {
+                else if (screen == SCREEN_RESULT && result_buttons_enabled) {
 
                     if (game.status == STATUS_DEFEAT && !reveal_word) {
 
@@ -953,6 +954,9 @@ int main(void) {
         }
 
         SDL_RenderPresent(renderer);
+        if (screen == SCREEN_RESULT && !result_buttons_enabled) {
+            result_buttons_enabled = true;
+        }
 
         SDL_Delay(16);
     }
