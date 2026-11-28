@@ -16,7 +16,7 @@ Juego del ahorcado para un jugador. El objetivo es descubrir una palabra secreta
 
 El juego cuenta con tres niveles de dificultad: fácil, medio y difícil. Las palabras se seleccionan aleatoriamente desde archivos de texto correspondientes a cada nivel.
 
-Cada partida comienza con 6 intentos y 6 puntos. Por cada letra incorrecta se descuenta un intento y un punto. La puntuación final se expresa en estrellas y depende de la dificultad seleccionada.
+Cada partida comienza con 6 intentos y 6 puntos. Por cada letra incorrecta se descuenta un intento. La penalización de puntos depende de la dificultad seleccionada: en el nivel fácil se descuenta 1 punto por error, mientras que en los niveles medio y difícil se descuentan 2 puntos por error. La puntuación puede llegar a ser negativa. La puntuación final se expresa en estrellas y depende de la dificultad seleccionada.
 
 El proyecto cuenta con dos versiones: una para consola y otra con interfaz gráfica desarrollada utilizando SDL3.
 
